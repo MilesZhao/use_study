@@ -5,6 +5,6 @@
 </head>
 <body>
 	<h2>Thanks for your help!</h2>
-	 <a href="index.php">Logout</a>
+	<a href="index.php">Logout</a>
 </body>
 </html>
