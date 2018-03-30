@@ -108,7 +108,7 @@
     <div>
         <div class="text-center">        
             <h2>Welcome to our research page! You have <?php echo $num_rows;?> pages need to be verified!</h2>
-            <h3>You are in page <?php echo $record+1;?> Currently! Once you are done, please go to <a href="questions.php">this page</a> to answer several questions!</h3>       
+            <h3>You are in page <?php echo $record+1;?> currently!</h3>       
         </div>
     </div>
     <div class="container-fluid">
@@ -259,19 +259,30 @@
         <div class="btn-group btn-group-lg">
 
             <?php if(!($record == 0) ){ ?>
-            <a href='tips.php?prev=<?php echo $prev?>' class="btn btn-success" role="button">PREV</a>
+                <a href='tips.php?prev=<?php echo $prev?>' class="btn btn-success" role="button">PREV</a>
             <?php }?>
 
             <?php if(!($record == $num_rows - 1) ){ ?>
-            <a href='tips.php?next=<?php echo $next?>' class="btn btn-warning" role="button">NEXT</a>
+                <a href='tips.php?next=<?php echo $next?>' class="btn btn-warning" role="button">NEXT</a>
             <?php }?>
 
             <?php if ($record == $num_rows - 1){?>
-            <a href='tips.php?next=<?php echo $next?>' class="btn btn-default" role="button">Finish</a>
+                <a class="btn btn-default" role="button" onclick="finishAnswer(-1)" >Finish</a>
             <?php }?>
 
         </div>  
     </div>
     <br>
+    <script type="application/x-javascript">
+        function finishAnswer(ans) {
+            if(ans === -1) {
+                //ok 
+                window.location.href="./questions.php";
+            } else {
+                alert("please check unfinished items!");
+            }
+        }
+
+    </script>
 </body>
 </html>
