@@ -19,13 +19,13 @@ include 'header.php';
 	      <label><input type="radio" name="q1" value=0>Disagree</label>
 	    </div>
 
-	    <p>Do you think the extracted tips from our approach are useful to you?</p>
+	    <!-- <p>Do you think the extracted tips from our approach are useful to you?</p>
 	    <div class="radio">
 	      <label><input type="radio" name="q2" value=1>Agree</label>
 	    </div>
 	    <div class="radio">
 	      <label><input type="radio" name="q2" value=0>Disagree</label>
-	    </div>
+	    </div> -->
 
 	    <!-- <p>If no to 2, do you think they are useful to novice developers?</p>
 	    <div class="radio">
@@ -35,8 +35,16 @@ include 'header.php';
 	      <label><input type="radio" name="q3" value=0>Disagree</label>
 	    </div> -->
 
+	    <p>Do you think the extracted tips from our approach are useful to you?</p >
+	    <div class="radio">
+	       <label><input type="radio" name="q2" value=1 onchange="showThree(false)">Agree</label>
+	    </div>
+	    <div class="radio">
+	       <label><input type="radio" name="q2" value=0 onchange="showThree(true)">Disagree</label>
+	    </div>
+
 		<div id="three" hidden="true">
-     		<p>3. If no to 2, do you think they are useful to novice developers?</p >
+     		<p>If no to 2, do you think they are useful to novice developers?</p >
             <div class="radio">
               <label><input type="radio" name="q3" value=1>Agree</label>
             </div>
@@ -55,7 +63,7 @@ include 'header.php';
 
 	    <p>Do you have any recommendation/comments/thoughts?</p>
 	    <div class="form-group">
-            <textarea class="form-control" rows="5" name="q5"><?php echo ($comments)?></textarea>
+            <textarea class="form-control" rows="5" name="q5"></textarea>
         </div>
         <input type="hidden" name="issubmit" value="<?php echo 1?>">
 	    <button type="submit">Submit</button>
