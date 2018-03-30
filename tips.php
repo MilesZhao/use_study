@@ -257,21 +257,21 @@
     <br>
     <div class="text-center">
         <div class="btn-group btn-group-lg">
+
             <?php if(!($record == 0) ){ ?>
             <a href='tips.php?prev=<?php echo $prev?>' class="btn btn-success" role="button">PREV</a>
             <?php }?>
+
             <?php if(!($record == $num_rows - 1) ){ ?>
             <a href='tips.php?next=<?php echo $next?>' class="btn btn-warning" role="button">NEXT</a>
             <?php }?>
+
             <?php if ($record == $num_rows - 1){?>
             <a href='tips.php?next=<?php echo $next?>' class="btn btn-default" role="button">Finish</a>
             <?php }?>
+
         </div>  
     </div>
     <br>
 </body>
 </html>
-
-<?php
-    include 'footer.php';
-?>
