@@ -2,32 +2,37 @@
     require 'db.php';
     $labeluser = $_COOKIE['userownid'];
 
-    if(isset($_GET['agree'])){
+    if(isset($_GET['agree'])&&isset($_GET['sign'])){
         $sql = "SELECT * FROM `user_study_participant_info` where `userid`=$labeluser";
         $result = runQuery($sql);
         $val = $_GET['agree'];
+        $signature = $_GET['sign'];
+            # code...
+
         if ($val==0){
             header("Location: disagreeinfo.php");
             exit();
         }
         if(count($result)>0){
-            $sql = "UPDATE `user_study_participant_info` set `above18`=:col1 where `userid` =:col6";
+            $sql = "UPDATE `user_study_participant_info` set `above18`=:col1,`name`=:col7 where `userid` =:col6";
             $statement = $conn->prepare($sql); 
             $statement->bindParam(':col1', $val);
             $statement->bindParam(':col6', $labeluser);
+            $statement->bindParam(':col7', $signature);
             $statement->execute();
         }else{
-            $sql = "INSERT into `user_study_participant_info` (`above18`,`userid`) values (:col1,:col6)";
+            $sql = "INSERT into `user_study_participant_info` (`above18`,`userid`,`name`) values (:col1,:col6,:col7)";
             $statement = $conn->prepare($sql); 
             $statement->bindParam(':col1', $val);
             $statement->bindParam(':col6', $labeluser);
+            $statement->bindParam(':col7', $signature);
             $statement->execute();
         }
         
     }
     include 'header.php';
 
-    $sql = "SELECT distinct `tipid` FROM `user_study_stat` where `ispara` = 1 and `userid`=$labeluser";
+    $sql = "SELECT `tipid` FROM `user_study_stat` where `isbaseline` = 0 and `userid`=$labeluser";
     $result = runQuery($sql);
     $num = count($result);
     $onehot_ids = array();
@@ -66,8 +71,13 @@
         $record = $current;
     }
     $id = $sample_ids[$current];
-
-    $sql = "SELECT * from paragraphs where ID='$id' ";
+    $sql = "SELECT * FROM `user_study_stat` where `isbaseline` = 0 and `userid`=$labeluser and `tipid`='$id'";
+    $row = runQuery($sql)[0];
+    if($row['ispara']==1){
+        $sql = "SELECT * from paragraphs where ID='$id' ";
+    }else{
+        $sql = "SELECT * from sentences where ID='$id' ";
+    }
     $row = runQuery($sql);
 
     if(count($row)>0){
@@ -86,7 +96,7 @@
 
     if ($isuseful != -1) {
         #main database
-        $sql = "UPDATE user_study_stat set `isuseful`='$isuseful' where `ispara` = 1 and `userid` = '$labeluser' AND `tipid`='$id' and `isbaseline`='$isbaseline'";
+        $sql = "UPDATE user_study_stat set `isuseful`='$isuseful' where `userid` = '$labeluser' AND `tipid`='$id' and `isbaseline`='$isbaseline'";
         $row = runQuery($sql);
     }
 
@@ -142,7 +152,7 @@
                         </tr>
                         <tr>
                             <?php 
-                                $sql = "SELECT * from user_study_stat where `ispara` = 1 and `userid` = '$labeluser' AND `tipid` = '$id' and `isbaseline`=0 ";
+                                $sql = "SELECT * from user_study_stat where `userid` = '$labeluser' AND `tipid` = '$id' and `isbaseline`=0 ";
                                 $result = runQuery($sql);
                             ?>
                             <td>
@@ -202,7 +212,7 @@
                         </tr>
                         <tr>
                             <?php 
-                                $sql = "SELECT * from user_study_stat where `ispara` = 1 and `userid` = '$labeluser' AND `tipid` = '$id' and `isbaseline`=1 ";
+                                $sql = "SELECT * from user_study_stat where `userid` = '$labeluser' AND `tipid` = '$id' and `isbaseline`=1 ";
                                 $result = runQuery($sql);
                             ?>
                             <td>
@@ -210,7 +220,7 @@
                                     if (count($result) > 0){
                                         echo $result[0]['txt'];                                  
                                     }else{
-                                        echo '<strong>Baseline did not fine tips, leave this alone</strong>';
+                                        echo '<strong>Baseline did not find tips, leave this alone</strong>';
                                     }
                                 ?>
                             </td>
